@@ -1,7 +1,10 @@
 import { Controller, Get, Post } from '@nestjs/common';
+import { User } from './user';
 
 @Controller('user')
 export class UserController {
+
+    constructor(private userService :User){}
 
     @Post("login")
     login():String{
