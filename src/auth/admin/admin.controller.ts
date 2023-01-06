@@ -1,22 +1,20 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
 import { AdminService } from './admin';
-import { AdminRepository } from './adminAuth.repository';
+import { AdminRegister } from './schema/adminAuth.schema';
+import { adminLoginBody, adminRegisterBody } from './types';
 
-type adminLoginBody = {
-    email : String
-    password : String
-}
 
-type adminRegisterBody = {
-    name : string,
-    email : string,
-    password : string
+type adminCreated = {
+    status : Number,
+    success : Boolean,
+    message : String
 }
 
 @Controller("admin")
 export class AdminController {
 
-    constructor(private adminService : AdminService , private adminRepo :AdminRepository){}
+    constructor(private adminService:AdminService){}
+
 
     @Post("login")
     login(@Body() body : adminLoginBody):String{
@@ -25,9 +23,8 @@ export class AdminController {
     }
 
     @Post("register")
-    async register(@Body() body : adminRegisterBody):Promise<String>{
-        const admin = await this.adminRepo.createAdmin(body)
-        console.log(admin)
-        return "/admin/register => admin register route admin created"
+    async register(@Body() adminData : adminRegisterBody):Promise<adminCreated>{
+        const Admin = await this.adminService.registerUser(adminData)
+        return {status : HttpStatus.CREATED , success : true , message : "Admin created"}
     }
 }

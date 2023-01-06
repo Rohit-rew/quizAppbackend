@@ -1,10 +1,10 @@
 import { Controller, Get, Post } from '@nestjs/common';
-import { User } from './user';
+import { UserService } from './user';
 
 @Controller('user')
 export class UserController {
 
-    constructor(private userService :User){}
+    constructor(private userService :UserService){}
 
     @Post("login")
     login():String{

@@ -7,6 +7,10 @@ import { AdminDocument, AdminRegister } from "./schema/adminAuth.schema";
 export class AdminRepository {
     constructor(@InjectModel(AdminRegister.name) private adminModel:Model<AdminDocument>){}
 
+    async findAdmin(email : String) : Promise<AdminRegister|null>{
+        return await this.adminModel.findOne({email})
+    }
+
     async createAdmin(adminData: AdminRegister) : Promise<AdminRegister> {
         return await this.adminModel.create(adminData)
     }
