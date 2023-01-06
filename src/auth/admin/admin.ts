@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class Admin {
+export class AdminService {
+
+    constructor(){}
 
     sendData():String{
         return "asdasdasd"
