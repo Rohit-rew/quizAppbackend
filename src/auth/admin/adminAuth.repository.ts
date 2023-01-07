@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { AdminDocument, AdminRegister } from "./schema/adminAuth.schema";
+import { adminRegisterBody } from "./types";
 
 @Injectable()
 export class AdminRepository {
@@ -11,7 +12,7 @@ export class AdminRepository {
         return await this.adminModel.findOne({email})
     }
 
-    async createAdmin(adminData: AdminRegister) : Promise<AdminRegister> {
+    async createAdmin(adminData: adminRegisterBody) : Promise<AdminRegister> {
         return await this.adminModel.create(adminData)
     }
 }

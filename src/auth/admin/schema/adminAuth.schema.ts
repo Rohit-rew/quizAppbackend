@@ -15,6 +15,8 @@ export class AdminRegister {
     @Prop({required : true})
     password : string;
 
+    _id:string
+
 }
 
 export const AdminSchema = SchemaFactory.createForClass(AdminRegister)

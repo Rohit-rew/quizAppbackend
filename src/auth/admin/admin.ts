@@ -52,7 +52,7 @@ export class AdminService {
 
     // return a JWT token
     const jwt = await this.jwtService.signAsync(
-      { email: existingAdmin.email , name:existingAdmin.name , admin : true },
+      { email: existingAdmin.email , name: existingAdmin.name , admin: true , id : existingAdmin._id },
       { algorithm: 'HS256', secret: process.env.JWT_SECRET, expiresIn: '1d' },
     );
     return jwt;
