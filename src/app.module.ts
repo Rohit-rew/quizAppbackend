@@ -8,12 +8,14 @@ import { ConfigModule } from '@nestjs/config';
 
 //mongoose
 import { MongooseModule } from '@nestjs/mongoose';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGO_URI || ''),
     AuthModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
