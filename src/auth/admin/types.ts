@@ -1,7 +1,7 @@
 
 export type adminLoginBody = {
-    email : String
-    password : String
+    email : string
+    password : string
 }
 
 export type adminRegisterBody = {

@@ -1,37 +1,60 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AdminRepository } from './adminAuth.repository';
 import { AdminRegister } from './schema/adminAuth.schema';
-import { adminRegisterBody , adminLoginBody } from './types';
+import { adminRegisterBody, adminLoginBody } from './types';
+
+// bcrypt
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AdminService {
+  constructor(
+    private adminRepo: AdminRepository,
+    private jwtService: JwtService,
+  ) {}
 
-    constructor(private adminRepo :AdminRepository){}
+  async registerAdmin(adminData: adminRegisterBody): Promise<AdminRegister> {
+    // will receive Jwt in the body then decode and create Admin
 
-    async registerAdmin(adminData : adminRegisterBody):Promise<AdminRegister>{
+    // encrypting the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(adminData.password, salt);
+    adminData.password = hashedPass;
 
-            // will receive Jwt in the body then decode and create Admin
+    // check existing Admin
+    const existingAdmin = await this.adminRepo.findAdmin(adminData.email);
+    if (existingAdmin)
+      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
 
-            // check existing Admin
-            const existingAdmin = await this.adminRepo.findAdmin(adminData.email)
-            if(existingAdmin) throw new HttpException("Email already exists" , HttpStatus.BAD_REQUEST)
-    
-            // if Admin does not exist create new admin
-            const newAdmin =  await this.adminRepo.createAdmin(adminData)
-            if(!newAdmin) throw new HttpException("something went wrong" , HttpStatus.INTERNAL_SERVER_ERROR)
+    // if Admin does not exist create new admin
+    const newAdmin = await this.adminRepo.createAdmin(adminData);
+    if (!newAdmin)
+      throw new HttpException(
+        'something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
 
-            return newAdmin
-      
-    }
+    return newAdmin;
+  }
 
-    async loginAdmin(adminData : adminLoginBody):Promise<Boolean>{
+  async loginAdmin(adminData: adminLoginBody): Promise<string> {
+    const existingAdmin = await this.adminRepo.findAdmin(adminData.email);
+    if (!existingAdmin)
+      throw new HttpException('User Does Not Exist', HttpStatus.NOT_FOUND);
 
-        const existingAdmin = await this.adminRepo.findAdmin(adminData.email)
-        if(!existingAdmin) throw new HttpException("user Does Not Exist" , HttpStatus.NOT_FOUND)
+    const passwordIsCorrect = await bcrypt.compare(
+      adminData.password,
+      existingAdmin.password,
+    );
+    if (!passwordIsCorrect)
+      throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
 
-        if(existingAdmin.password != adminData.password) throw new HttpException("Incorrect password" , HttpStatus.UNAUTHORIZED)
-
-        return true
-
-    }
+    // return a JWT token instaed of boolean
+    const jwt = await this.jwtService.signAsync(
+      { email: existingAdmin.email },
+      { algorithm: 'HS256', secret: process.env.JWT_SECRET, expiresIn: '1d' },
+    );
+    return jwt;
+  }
 }
