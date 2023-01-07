@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { AdminService } from './admin';
-import { AdminRegister } from './schema/adminAuth.schema';
 import { adminLoginBody, adminRegisterBody } from './types';
 
 
@@ -28,9 +28,14 @@ export class AdminController {
         return {status : HttpStatus.CREATED , success : true , message : "Admin created"}
     }
 
+
     @Post("login")
-    async login(@Body() adminData : adminLoginBody):Promise<successLogin>{
-        const status = await this.adminService.loginAdmin(adminData)
-            return {status : HttpStatus.OK , success : true , message : "Admin Logged In" , token : status }
+    @HttpCode(200)
+    async login(@Body() adminData : adminLoginBody , @Res({ passthrough: true }) response: Response):Promise<successLogin>{
+        const token = await this.adminService.loginAdmin(adminData)
+        // set the token in header, this will save the token in the user's browser
+        response.cookie("quizify" , token)
+        return {status : HttpStatus.OK , success : true , message : "Admin Logged In" , token : token }
     }
 }
+ 

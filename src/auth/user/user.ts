@@ -40,7 +40,7 @@ export class UserService {
     if(!passwordIsCorrect) throw new HttpException("Incorrect password" , HttpStatus.UNAUTHORIZED);
 
     // if password is correct send the jwt with the payload
-    const jwt = await this.jwtService.signAsync({email:existingUser.email , name:existingUser.name} , {algorithm : 'HS256' , secret : process.env.JWT_SECRET , expiresIn: '1d'})
+    const jwt = await this.jwtService.signAsync({email:existingUser.email , name:existingUser.name , admin : false} , {algorithm : 'HS256' , secret : process.env.JWT_SECRET , expiresIn: '1d'})
     console.log(existingUser._id)
     return jwt
   }

@@ -16,7 +16,6 @@ export class UserRegister{
     @Prop()
     password:string;
 
-    @Prop()
     _id:string
 
 }

@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { userLoginBody, userRegisterBody } from './types';
 import { UserService } from './user';
+import { Response } from 'express';
+
 
 //types
 type successRegister = {
@@ -21,13 +23,16 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('login')
-  async login(@Body() userData : userLoginBody): Promise<successLogin> {
-    const jwt = await this.userService.loginUser(userData)
+  @HttpCode(200)
+  async login(@Body() userData:userLoginBody, @Res({ passthrough: true }) response: Response): Promise<successLogin> {
+    const token = await this.userService.loginUser(userData)
+    // set the token in header, this will save the token in the user's browser
+    response.cookie("quizify" , token)
     return {
         status:HttpStatus.OK,
         success:true,
         message:"User logged in",
-        token : jwt
+        token : token
     }
   }
 
