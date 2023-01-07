@@ -50,7 +50,7 @@ export class AdminService {
     if (!passwordIsCorrect)
       throw new HttpException('Incorrect password', HttpStatus.UNAUTHORIZED);
 
-    // return a JWT token instaed of boolean
+    // return a JWT token
     const jwt = await this.jwtService.signAsync(
       { email: existingAdmin.email },
       { algorithm: 'HS256', secret: process.env.JWT_SECRET, expiresIn: '1d' },

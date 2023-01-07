@@ -5,6 +5,6 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [AdminModule, UserModule],
   controllers: [],
-  providers: []
+  providers: [],
 })
 export class AuthModule {}

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 export type userDocument = UserRegister & Document
@@ -6,13 +7,13 @@ export type userDocument = UserRegister & Document
 export class UserRegister{
 
     @Prop()
-    name:String;
+    name:string;
 
     @Prop()
-    email:String;
+    email:string;
 
     @Prop()
-    password:String;
+    password:string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserRegister)

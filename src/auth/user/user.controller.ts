@@ -1,18 +1,44 @@
-import { Controller, Get, Post } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { userLoginBody, userRegisterBody } from './types';
 import { UserService } from './user';
+
+//types
+type successRegister = {
+    status:number,
+    success:boolean,
+    message:string
+}
+type successLogin = {
+    status:number,
+    success:boolean,
+    message:string,
+    token : string
+}
 
 @Controller('user')
 export class UserController {
+  constructor(private userService: UserService) {}
 
-    constructor(private userService :UserService){}
-
-    @Post("login")
-    login():String{
-        return "/user/login => userlogin Route post req"
+  @Post('login')
+  async login(@Body() userData : userLoginBody): Promise<successLogin> {
+    const jwt = await this.userService.loginUser(userData)
+    return {
+        status:HttpStatus.OK,
+        success:true,
+        message:"User logged in",
+        token : jwt
     }
+  }
 
-    @Post("register")
-    register():String{
-        return "/user/login => userregister Route post req"
-    }
+  @Post('register')
+  async register(@Body() userData : userRegisterBody): Promise<successRegister> {
+    await this.userService.registerUser(userData);
+    return {
+        status : HttpStatus.CREATED,
+        success: true, 
+        message : "user Created"
+    };
+  }
+
 }
