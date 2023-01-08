@@ -19,19 +19,19 @@ export type questionType = {
 @Schema()
 export default class AllQuizes{
     
-    @Prop({required : true})
+    @Prop({required : [true , "Quiz name not provided"]})
     quizName: string
 
-    @Prop()
+    @Prop({required : [true , "Total Questions not provided"]})
     totalQuestions: number
 
-    @Prop()
+    @Prop({required : [true , "category not provided"]})
     category: string
 
-    @Prop()
+    @Prop({required : [true , "createdBy not provided"]})
     createdBy: string
 
-    @Prop()
+    @Prop({required : [true , "Question set not provided"]})
     questionSet: questionType[]
 
     _id: string

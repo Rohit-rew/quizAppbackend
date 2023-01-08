@@ -7,13 +7,17 @@ export type adminQuizDocument = AdminQuiz & Document
 @Schema()
 export default class AdminQuiz{
 
-    @Prop()
+    @Prop({required : [true , "Admin name is required"]})
     name : string
 
-    @Prop()
+    @Prop({required : [true , 'email field is required'] , unique : true})
     email : string
 
-    @Prop()
+    @Prop({required : [true , "admin Id id is required"] , unique : true})
+    adminId:string
+
+
+    @Prop({required : [true , "quiz id array os required"]})
     quizes : string[]
 
 }
