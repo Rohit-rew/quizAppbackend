@@ -6,8 +6,14 @@ export class AdminController {
 
     constructor(private adminService : AdminService){}
 
-    @Get()
+    @Get("create")
     test():string{
-        return this.adminService.sendString()
+        return this.adminService.create()
+    }
+    @Get("find")
+    test2():string{
+        return this.adminService.find()
     }
 }
+
+
