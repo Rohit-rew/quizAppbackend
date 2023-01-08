@@ -86,6 +86,7 @@ export class QuizesController {
   }
 
   // => protected route => only users can go
+  // returns one quiz
   @Get(":id")
   async test(
     @Param() param: paramTypes,

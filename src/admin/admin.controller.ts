@@ -38,16 +38,6 @@ export class AdminController {
         }
     }
 
-
-
-    @Post("addquiz")
-    async addQuiz(@Body() adminAndQuizId : {adminId : string , quizId : string}): Promise<string>{
-        console.log(adminAndQuizId.adminId , adminAndQuizId.quizId)
-        // return "heww"
-        return await this.adminQuizService.addQuizIdToAdminQuizColl(adminAndQuizId.adminId , adminAndQuizId.quizId)
-    }   
-
-
 }
 
 

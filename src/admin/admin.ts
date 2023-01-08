@@ -43,6 +43,7 @@ export default class AdminQuizService {
     }
 
     //=> called by quizes service
+    // => not needed since field createdby added in each quiz created which will be used to fild all the quizes created by the admin
     async addQuizIdToAdminQuizColl(adminId : string , quizId:string):Promise<string>{
         try {
             await this.adminQuizRepo.addQuizIdInAdminQuizColl(adminId , quizId)
