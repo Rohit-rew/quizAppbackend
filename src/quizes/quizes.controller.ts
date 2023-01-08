@@ -21,8 +21,8 @@ type createQuizResponse = {
 };
 
 type paramTypes = {
-  id:string
-}
+  id: string;
+};
 
 @Controller("quiz")
 export class QuizesController {
@@ -36,20 +36,23 @@ export class QuizesController {
     @Req() request: Request
   ): Promise<createQuizResponse> {
     const token = request.headers.authorization;
-    if (token) { // if token is present validate it
-      const isValidAdminToken = await this.quizesService.validateJwtToken(
+    if (token) {
+      // if token is present validate it
+      const isValidAdminToken = await this.quizesService.validateAdminJwtToken(
         token
       );
-      if (!isValidAdminToken) // if not a valid admin token throw error
+      if (!isValidAdminToken)
+        // if not a valid admin token throw error
         throw new HttpException("invalid token", HttpStatus.UNAUTHORIZED);
-        // if valid admin token proceed with the operation
-      const id = await this.quizesService.createQuiz(quizData , token);
+      // if valid admin token proceed with the operation
+      const id = await this.quizesService.createQuiz(quizData, token);
       return {
         status: 201,
         message: "quiz created",
         id: id,
       };
-    } else { // if token is not present throw unauthorised error
+    } else {
+      // if token is not present throw unauthorised error
       throw new HttpException(
         "Authorization token not present",
         HttpStatus.UNAUTHORIZED
@@ -60,13 +63,11 @@ export class QuizesController {
   //===> protected
   // this gets all quizes that a particular admin has created and returns the quiz array
   @Get("getAll")
-  async GetManyById(
-    @Req() request: Request
-  ): Promise<quizType[] | null> {
+  async GetManyById(@Req() request: Request): Promise<quizType[] | null> {
     const token = request.headers.authorization;
     if (token) {
       // if token is present validate it
-      const isValidAdminToken = await this.quizesService.validateJwtToken(
+      const isValidAdminToken = await this.quizesService.validateAdminJwtToken(
         token
       );
       //if token is not a valid admin token throw error
@@ -75,7 +76,8 @@ export class QuizesController {
       // if token is valid admin token proceed with the function
       const quizes = await this.quizesService.GetManyById(token);
       return quizes;
-    } else { // if token is not present throw unauthorised error
+    } else {
+      // if token is not present throw unauthorised error
       throw new HttpException(
         "Authorization token not present",
         HttpStatus.UNAUTHORIZED
@@ -83,11 +85,26 @@ export class QuizesController {
     }
   }
 
+  // => protected route => only users can go
+  @Get(":id")
+  async test(
+    @Param() param: paramTypes,
+    @Req() request: Request
+  ): Promise<AllQuizes> {
+    const token = request.headers.authorization;
+    if (token) {
+      // if token persent validate it
+      const isValidToken = await this.quizesService.validateUserJwtToken(token);
+      if (!isValidToken)
+        throw new HttpException("invalid token", HttpStatus.UNAUTHORIZED);
 
-  // => protected route => only users can go 
-  @Get(':id')
-  async test(@Param() param : paramTypes  ):Promise<AllQuizes>{
-    const quiz = await this.quizesService.GetOneById(param.id)
-    return quiz
+      const quiz = await this.quizesService.GetOneById(param.id);
+      return quiz;
+    } else {
+      throw new HttpException(
+        "Authorization token not present",
+        HttpStatus.UNAUTHORIZED
+      );
+    }
   }
 }

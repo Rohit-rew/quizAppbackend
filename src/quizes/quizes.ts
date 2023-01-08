@@ -57,7 +57,7 @@ export class QuizesService {
         }
     }
 
-    async validateJwtToken(token : string):Promise<boolean>{
+    async validateAdminJwtToken(token : string):Promise<boolean>{
         try {
             const decodedToken = await this.jwtService.verify(token , {secret : process.env.JWT_SECRET})
             if(!decodedToken.admin) return false
@@ -66,6 +66,19 @@ export class QuizesService {
             throw new HttpException(error.message , HttpStatus.NOT_ACCEPTABLE)
         }
     }
+
+    async validateUserJwtToken(token : string):Promise<boolean>{
+        try {
+            const decodedToken = await this.jwtService.verify(token , {secret : process.env.JWT_SECRET})
+            if(!decodedToken) return false
+            if(decodedToken.admin) return false
+            return true
+        } catch (error) {
+            throw new HttpException(error.message , HttpStatus.NOT_ACCEPTABLE)
+        }
+    }
+
+
 }
 
 
