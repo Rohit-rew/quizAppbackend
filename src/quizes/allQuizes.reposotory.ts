@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import AllQuizes, { AllQuizDocument, questionType } from "./schema/allQuizes.schema";
@@ -8,6 +8,7 @@ export type quizType = {
     totalQuestions: number
     category: string
     createdBy: string
+    creatorId:string
     questionSet: questionType[]
 }
 
@@ -19,9 +20,15 @@ export class AllQuizesRepo {
         return await this.allQuizModal.create(quizData)
     }
 
-    async findQuizes(idArray : string[]) : Promise<AllQuizes[]>{
-        const quizes = await this.allQuizModal.find({"_id" : {"$in" : idArray}})
+    async findQuizes(adminId : string) : Promise<AllQuizes[]>{
+        const quizes = await this.allQuizModal.find({creatorId : adminId})
         return quizes
+    }
+
+    async findOneById(quizId:string) : Promise<AllQuizes>{
+        const quiz = await this.allQuizModal.findById(quizId)
+        if(!quiz) throw new HttpException("Invalid quiz id" , HttpStatus.NOT_FOUND)
+        return quiz
     }
 }
 

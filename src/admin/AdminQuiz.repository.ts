@@ -16,7 +16,6 @@ export class AdminQuizrepo{
 
     async findQuizes(adminId : string): Promise<string[]>{
         const foundData = await this.AdminQuizModal.findOne({adminId} , {quizes : 20});
-        console.log(foundData?.quizes)
         if(!foundData) throw new HttpException('admin Quiz collection does not exist' , HttpStatus.NOT_FOUND)
             return  foundData.quizes
     }

@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 //modules
 import { AdminQuizModule } from './admin/admin.module';
 import { QuizesModule } from './quizes/quizes.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { QuizesModule } from './quizes/quizes.module';
     AuthModule,
     AdminQuizModule,
     QuizesModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

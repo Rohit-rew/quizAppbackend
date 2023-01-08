@@ -34,6 +34,12 @@ export default class AllQuizes{
     @Prop({required : [true , "Question set not provided"]})
     questionSet: questionType[]
 
+    @Prop({required : [true , "creator id requierd"]})
+    creatorId: string
+
+    @Prop({default : Date.now()})
+    createdAt : Date
+
     _id: string
 
 }

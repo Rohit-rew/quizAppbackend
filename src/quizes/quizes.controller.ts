@@ -4,18 +4,25 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   Req,
 } from "@nestjs/common";
 import { quizType } from "./allQuizes.reposotory";
 import { QuizesService } from "./quizes";
 import { Request } from "express";
+import AllQuizes from "./schema/allQuizes.schema";
 
+// types
 type createQuizResponse = {
   status: number;
   message: string;
   id: string;
 };
+
+type paramTypes = {
+  id:string
+}
 
 @Controller("quiz")
 export class QuizesController {
@@ -29,20 +36,20 @@ export class QuizesController {
     @Req() request: Request
   ): Promise<createQuizResponse> {
     const token = request.headers.authorization;
-    if (token) {
+    if (token) { // if token is present validate it
       const isValidAdminToken = await this.quizesService.validateJwtToken(
         token
       );
-      if (!isValidAdminToken)
+      if (!isValidAdminToken) // if not a valid admin token throw error
         throw new HttpException("invalid token", HttpStatus.UNAUTHORIZED);
-
-      const id = await this.quizesService.createQuiz(quizData);
+        // if valid admin token proceed with the operation
+      const id = await this.quizesService.createQuiz(quizData , token);
       return {
         status: 201,
         message: "quiz created",
         id: id,
       };
-    } else {
+    } else { // if token is not present throw unauthorised error
       throw new HttpException(
         "Authorization token not present",
         HttpStatus.UNAUTHORIZED
@@ -52,9 +59,8 @@ export class QuizesController {
 
   //===> protected
   // this gets all quizes that a particular admin has created and returns the quiz array
-  @Post("getMany")
+  @Get("getAll")
   async GetManyById(
-    @Body() idArray: string[],
     @Req() request: Request
   ): Promise<quizType[] | null> {
     const token = request.headers.authorization;
@@ -67,7 +73,7 @@ export class QuizesController {
       if (!isValidAdminToken)
         throw new HttpException("invalid token", HttpStatus.UNAUTHORIZED);
       // if token is valid admin token proceed with the function
-      const quizes = await this.quizesService.GetManyById(idArray);
+      const quizes = await this.quizesService.GetManyById(token);
       return quizes;
     } else { // if token is not present throw unauthorised error
       throw new HttpException(
@@ -75,5 +81,13 @@ export class QuizesController {
         HttpStatus.UNAUTHORIZED
       );
     }
+  }
+
+
+  // => protected route => only users can go 
+  @Get(':id')
+  async test(@Param() param : paramTypes  ):Promise<AllQuizes>{
+    const quiz = await this.quizesService.GetOneById(param.id)
+    return quiz
   }
 }
