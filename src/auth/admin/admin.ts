@@ -6,12 +6,15 @@ import { adminRegisterBody, adminLoginBody } from './types';
 // bcrypt
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { AdminQuizrepo } from 'src/admin/AdminQuiz.repository';
+import AdminQuizService from 'src/admin/admin';
 
 @Injectable()
 export class AdminService {
   constructor(
     private adminRepo: AdminRepository,
     private jwtService: JwtService,
+    private adminQuizService : AdminQuizService
   ) {}
 
   async registerAdmin(adminData: adminRegisterBody): Promise<AdminRegister> {
@@ -34,8 +37,25 @@ export class AdminService {
         'something went wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+        console.log("registered admin id")
+        console.log(newAdmin._id)
 
-    return newAdmin;
+    // create admin db collecton 
+    console.log({
+      name : newAdmin.name,
+      email : newAdmin.email,
+      adminId : newAdmin._id,
+    })
+    try {
+      await this.adminQuizService.createAdminQuizColl({name : newAdmin.name , email : newAdmin.email , adminId : newAdmin._id , quizes : []})
+      return newAdmin;
+    } catch (error) {
+      console.log(error)
+      throw new HttpException(
+        error.message,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async loginAdmin(adminData: adminLoginBody): Promise<string> {

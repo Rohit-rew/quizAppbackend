@@ -19,8 +19,9 @@ export class AllQuizesRepo {
         return await this.allQuizModal.create(quizData)
     }
 
-    async findQuizes(idArray : string[]) : Promise<AllQuizes[] | null>{
-        return await this.allQuizModal.find({"_id" : {"$in" : idArray}})
+    async findQuizes(idArray : string[]) : Promise<AllQuizes[]>{
+        const quizes = await this.allQuizModal.find({"_id" : {"$in" : idArray}})
+        return quizes
     }
 }
 

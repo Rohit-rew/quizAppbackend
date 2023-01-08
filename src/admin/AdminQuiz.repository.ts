@@ -21,5 +21,9 @@ export class AdminQuizrepo{
             return  foundData.quizes
     }
 
+    async addQuizIdInAdminQuizColl(adminId : string , quizId : string):Promise<void>{
+        await this.AdminQuizModal.findOneAndUpdate({adminId : adminId} , { $push: { quizes: quizId } })
+    }
+
 } 
 

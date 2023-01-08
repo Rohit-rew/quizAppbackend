@@ -10,10 +10,10 @@ export default class AdminQuiz{
     @Prop({required : [true , "Admin name is required"]})
     name : string
 
-    @Prop({required : [true , 'email field is required'] , unique : true})
+    @Prop({required : [true , 'email field is required']})
     email : string
 
-    @Prop({required : [true , "admin Id id is required"] , unique : true})
+    @Prop({required : [true , "admin Id is required"]})
     adminId:string
 
 

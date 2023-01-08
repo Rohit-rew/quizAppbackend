@@ -5,17 +5,15 @@ import { AdminQuizrepo } from './AdminQuiz.repository';
 import { adminQuizData } from './admin.controller';
 
 @Injectable()
-export class AdminService {
+export default class AdminQuizService {
 
     constructor(private adminQuizRepo : AdminQuizrepo){}
 
-    async createAdmin(adminData : adminQuizData):Promise<string>{
+    async createAdminQuizColl(adminData : adminQuizData):Promise<string>{
         try {
             await this.adminQuizRepo.createAdminQuizColl(adminData)
             return "created"
-            
         } catch (error) {
-            console.log(error)
             throw new HttpException(error.message , HttpStatus.BAD_REQUEST)
         }
     }
@@ -29,6 +27,16 @@ export class AdminService {
         } catch (error) {
             console.log(error)
             throw new HttpException(error.message , HttpStatus.UNAUTHORIZED)
+        }
+    }
+
+    async addQuizIdToAdminQuizColl(adminId : string , quizId:string):Promise<string>{
+        try {
+            await this.adminQuizRepo.addQuizIdInAdminQuizColl(adminId , quizId)
+            return "done"
+        } catch (error) {
+            console.log(error)
+            throw new HttpException(error.message , HttpStatus.BAD_GATEWAY)
         }
     }
 }
