@@ -30,6 +30,7 @@ export default class AdminQuizService {
     }
 
     // ==>working
+    //=> not needed can be removed
     async getAdminQuizesById(token : string):Promise<string[]>{
         const decodedJwt = await this.getDecodedJwt(token)
 

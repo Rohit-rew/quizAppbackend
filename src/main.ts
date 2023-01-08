@@ -16,7 +16,6 @@ async function bootstrap() {
     allowedHeaders: "*",
     origin: "*",
   });
-  app.use(cors());
   app.use(cookieParser());
   await app.listen(process.env.PORT || 4000);
 }
