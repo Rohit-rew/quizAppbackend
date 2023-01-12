@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { AdminDocument, AdminRegister } from "./schema/adminAuth.schema";
-import { adminRegisterBody } from "./types";
+import { adminRegisterBody } from "./types/admin.types";
 
 @Injectable()
 export class AdminRepository {

@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AdminRepository } from './adminAuth.repository';
 import { AdminRegister } from './schema/adminAuth.schema';
-import { adminRegisterBody, adminLoginBody } from './types';
 
 // bcrypt
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AdminQuizrepo } from 'src/admin/AdminQuiz.repository';
 import AdminQuizService from 'src/admin/admin';
+import { adminLoginBody, adminRegisterBody } from './types/admin.types';
 
 @Injectable()
 export class AdminService {
