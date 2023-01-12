@@ -14,6 +14,6 @@ import AllQuizes, { AllQuizesSchema } from './schema/allQuizes.schema';
     MongooseModule.forFeature([{name: AdminQuiz.name , schema : AdminQuizSchema}])
 ],
     controllers:[QuizesController],
-    providers: [QuizesService , AllQuizesRepo , AdminQuizService , AdminQuizrepo , JwtService]
+    providers: [QuizesService , AllQuizesRepo , JwtService]
 })
 export class QuizesModule {}

@@ -2,15 +2,8 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import AllQuizes, { AllQuizDocument, questionType } from "./schema/allQuizes.schema";
+import { quizType } from "./types/quiz.type";
 
-export type quizType = {
-    quizName: string
-    totalQuestions: number
-    category: string
-    createdBy: string
-    creatorId:string
-    questionSet: questionType[]
-}
 
 @Injectable()
 export class AllQuizesRepo {

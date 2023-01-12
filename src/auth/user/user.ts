@@ -2,11 +2,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRegister } from './schema/userAuth.schema';
-import { userLoginBody, userRegisterBody } from './types';
 import { UserRepository } from './userAuth.repository';
 
 //bcrypt
 import * as bcrypt from "bcrypt"
+
+//types
+import { userLoginBody, userRegisterBody } from './types/user.types';
 
 @Injectable()
 export class UserService {

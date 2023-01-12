@@ -1,21 +1,12 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { AdminService } from './admin';
-import { adminLoginBody, adminRegisterBody } from './types';
+
+//types
+import { adminLoginBody, adminRegisterBody, successLogin, successRegister } from './types/admin.types';
 
 
-type successRegister = {
-    status : number,
-    success : boolean,
-    message : string
-}
 
-type successLogin = {
-    status : number,
-    success : true,
-    message : string ,
-    token: string
-}
 
 @Controller("admin")
 export class AdminController {

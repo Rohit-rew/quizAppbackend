@@ -1,22 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
-import { userLoginBody, userRegisterBody } from './types';
 import { UserService } from './user';
 import { Response } from 'express';
 
 
 //types
-type successRegister = {
-    status:number,
-    success:boolean,
-    message:string
-}
-type successLogin = {
-    status:number,
-    success:boolean,
-    message:string,
-    token : string
-}
+import { successLogin, successRegister, userLoginBody, userRegisterBody } from './types/user.types';
+
 
 @Controller('user')
 export class UserController {

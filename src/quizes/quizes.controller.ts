@@ -8,21 +8,13 @@ import {
   Post,
   Req,
 } from "@nestjs/common";
-import { quizType } from "./allQuizes.reposotory";
 import { QuizesService } from "./quizes";
 import { Request } from "express";
 import AllQuizes from "./schema/allQuizes.schema";
 
 // types
-type createQuizResponse = {
-  status: number;
-  message: string;
-  id: string;
-};
+import { createQuizResponse, paramTypes, quizType } from "./types/quiz.type";
 
-type paramTypes = {
-  id: string;
-};
 
 @Controller("quiz")
 export class QuizesController {

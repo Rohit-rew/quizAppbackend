@@ -4,7 +4,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { userDocument, UserRegister } from './schema/userAuth.schema';
-import { userRegisterBody } from './types';
+
+//types
+import { userRegisterBody } from './types/user.types';
 
 @Injectable()
 export class UserRepository {
@@ -19,4 +21,5 @@ export class UserRepository {
   async findUser(email:string):Promise<UserRegister|null>{
     return await this.UserModel.findOne({email})
   }
+  
 }

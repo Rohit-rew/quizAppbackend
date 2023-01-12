@@ -14,16 +14,5 @@ export class AdminQuizrepo{
         return await this.AdminQuizModal.create(adminQuizData)
     }
 
-    // => not needed can be removed
-    async findQuizes(adminId : string): Promise<string[]>{
-        const foundData = await this.AdminQuizModal.findOne({adminId} , {quizes : 20});
-        if(!foundData) throw new HttpException('admin Quiz collection does not exist' , HttpStatus.NOT_FOUND)
-            return  foundData.quizes
-    }
-
-    async addQuizIdInAdminQuizColl(adminId : string , quizId : string):Promise<void>{
-        await this.AdminQuizModal.findOneAndUpdate({adminId : adminId} , { $push: { quizes: quizId } })
-    }
-
 } 
 

@@ -2,17 +2,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AdminQuizrepo } from './AdminQuiz.repository';
 
 //types
-import { adminQuizData } from './admin.controller';
 import { JwtService } from '@nestjs/jwt';
-
-type decodedJwt = {
-    email: string,
-    name: string,
-    admin: boolean,
-    id: string,
-    iat: number,
-    exp: number
-  }
+import { adminQuizData } from './types/admin.types';
+import { decodedJwt } from './types/admin.types';
 
 @Injectable()
 export default class AdminQuizService {
@@ -26,32 +18,6 @@ export default class AdminQuizService {
             return "created"
         } catch (error) {
             throw new HttpException(error.message , HttpStatus.BAD_REQUEST)
-        }
-    }
-
-    // ==>working
-    //=> not needed can be removed
-    async getAdminQuizesById(token : string):Promise<string[]>{
-        const decodedJwt = await this.getDecodedJwt(token)
-
-        try {
-            const foundQuizes = await this.adminQuizRepo.findQuizes(decodedJwt.id)
-            return foundQuizes
-        } catch (error) {
-            console.log(error)
-            throw new HttpException(error.message , HttpStatus.UNAUTHORIZED)
-        }
-    }
-
-    //=> called by quizes service
-    // => not needed since field createdby added in each quiz created which will be used to fild all the quizes created by the admin
-    async addQuizIdToAdminQuizColl(adminId : string , quizId:string):Promise<string>{
-        try {
-            await this.adminQuizRepo.addQuizIdInAdminQuizColl(adminId , quizId)
-            return "done"
-        } catch (error) {
-            console.log(error)
-            throw new HttpException(error.message , HttpStatus.BAD_GATEWAY)
         }
     }
 
